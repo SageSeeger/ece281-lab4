@@ -20,7 +20,7 @@ end top_basys3;
 
 architecture top_basys3_arch of top_basys3 is
 
-    -- ================= SIGNALS =================
+    -- SIGNALS
     signal floor1, floor2 : std_logic_vector(3 downto 0);
     signal stopped1, stopped2 : std_logic;
     signal dir1, dir2 : std_logic;
@@ -29,7 +29,7 @@ architecture top_basys3_arch of top_basys3 is
     signal tdm_data : std_logic_vector(3 downto 0);
     signal tdm_sel  : std_logic_vector(3 downto 0);
 
-    -- ================= COMPONENTS =================
+    -- COMPONENTS
     component sevenseg_decoder is
         port (
             i_Hex   : in  STD_LOGIC_VECTOR (3 downto 0);
@@ -72,18 +72,18 @@ architecture top_basys3_arch of top_basys3 is
 
 begin
 
-    -- ================= CLOCK DIVIDER =================
+    -- CLOCK DIVIDER 
     CLK_DIV: clock_divider
         generic map (
-            k_DIV => 50000000   -- ~0.5 sec timing
+            k_DIV => 50000000   -- 0.5 sec 
         )
         port map (
             i_clk   => clk,
-            i_reset => btnU,    -- master reset resets clock
+            i_reset => btnU,    -- master reset
             o_clk   => slow_clk
         );
 
-    -- ================= FSM INSTANCES =================
+    -- FSM INSTANCES
     ELEVATOR1: elevator_controller_fsm
         port map (
             i_clk        => slow_clk,
@@ -102,7 +102,7 @@ begin
             o_floor      => floor2
         );
 
-    -- ================= TDM DISPLAY =================
+    -- TDM DISPLAY 
     TDM_INST: TDM4
         port map (
             i_clk   => clk,       -- fast clock for display
@@ -117,14 +117,14 @@ begin
             o_sel  => tdm_sel
         );
 
-    -- ================= 7-SEG DECODER =================
+    -- 7-SEG DECODER 
     SEG_DEC: sevenseg_decoder
         port map (
             i_Hex   => tdm_data,
             o_seg_n => seg
         );
 
-    -- ================= OUTPUTS =================
+    -- OUTPUTS
     an <= tdm_sel;
 
     -- LED 15 = FSM clock
