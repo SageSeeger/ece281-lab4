@@ -25,7 +25,10 @@ end top_basys3;
 architecture top_basys3_arch of top_basys3 is
 
     -- signal declarations
-    
+    signal floor1, floor2 : std_logic_vector(3 downto 0);
+    signal stopped1, stopped2 : std_logic;
+    signal dir1, dir2 : std_logic;
+    signal slow_clk : std_logic;
   
 	-- component declarations
     component sevenseg_decoder is
@@ -70,14 +73,25 @@ architecture top_basys3_arch of top_basys3 is
 	
 begin
 	-- PORT MAPS ----------------------------------------
-    	
-	
+    CLK_DIV: clock_divider
+        generic map (
+            k_DIV => 50000000 
+            )
+       port map (
+       i_clk => clk,
+       i_reset => btnL,
+       o_clk =>slow_clk
+       );
 	-- CONCURRENT STATEMENTS ----------------------------
+	stopped1 <= sw(0);
+	dir1 <= sw(1);
 	
+	stopped2 <= sw(14);
+	dir2 <= sw(15);
 	-- LED 15 gets the FSM slow clock signal. The rest are grounded.
-	
+	led(15) <= slow_clk;
 	-- leave unused switches UNCONNECTED. Ignore any warnings this causes.
-	
+	   
 	-- reset signals
 	
 end top_basys3_arch;
